@@ -1,0 +1,15 @@
+{:duct.profile/base
+ {:duct.core/project-ns scramblies-back
+
+  :duct.router/ataraxy
+  {:routes {[:get "/example"] [:scramblies-back.handler/example]}}
+
+  :scramblies-back.handler/example {}}
+
+ :duct.profile/dev   #duct/include "dev"
+ :duct.profile/local #duct/include "local"
+ :duct.profile/prod  {}
+
+ :duct.module/logging {}
+ :duct.module.web/api
+ {}}
