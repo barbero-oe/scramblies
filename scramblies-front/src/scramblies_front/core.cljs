@@ -4,8 +4,8 @@
    [re-frame.core :as re-frame]
    [scramblies-front.events :as events]
    [scramblies-front.views :as views]
-   [scramblies-front.config :as config]
-   ))
+   [scramblies-front.config :as config]))
+
 
 
 (defn dev-setup []
