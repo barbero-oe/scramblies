@@ -8,6 +8,7 @@
     (is (true? (scramble? "dlrow" "world")))
     (is (true? (scramble? "helloworld" "world")))
     (is (true? (scramble? "rekqodlw" "world")))
+    (is (false? (scramble? "foo" "boo")))
     (is (true? (scramble? "cedewaraaossoqqyt" "codewars")))
     (is (false? (scramble? "katas" "steak")))
     (is (false? (scramble? "kata" "katas")))))

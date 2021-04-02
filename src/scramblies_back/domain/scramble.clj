@@ -5,4 +5,4 @@
         diff (reduce-kv use-character
                         (frequencies str1)
                         (frequencies target))]
-    (not (some neg? (vals diff)))))
+    (not-any? neg? (vals diff))))

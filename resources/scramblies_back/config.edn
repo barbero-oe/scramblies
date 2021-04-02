@@ -2,9 +2,10 @@
  {:duct.core/project-ns scramblies-back
 
   :duct.router/ataraxy
-  {:routes {[:get "/example"] [:scramblies-back.handler/example]}}
+  {:routes
+   {[:get "/scramble/" string "/" target] [:scramblies-back.handler/scramble string target]}}
 
-  :scramblies-back.handler/example {}}
+  :scramblies-back.handler/scramble {}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"
