@@ -5,6 +5,11 @@
             [scramblies-front.events :as e]
             [scramblies-front.subs :as s]))
 
+(defn complete-values []
+  (rf/dispatch [::e/initialize-db])
+  (rf/dispatch [::e/change-string "value"])
+  (rf/dispatch [::e/change-target "value"]))
+
 (deftest changes-db-state
   (testing "changes string value"
     (rf-test/run-test-sync
@@ -24,7 +29,7 @@
     (rf-test/run-test-sync
       (rf/reg-fx :http-xhrio (fn [{on-failure :on-failure}]
                                (rf/dispatch on-failure)))
-      (rf/dispatch [::e/initialize-db])
+      (complete-values)
       (rf/dispatch [::e/query-scrambliness])
       (let [error (rf/subscribe [::s/error])]
         (is (= "Oops, try again..." @error)))))
@@ -33,7 +38,7 @@
     (rf-test/run-test-sync
       (rf/reg-fx :http-xhrio (fn [{on-success :on-success}]
                                (rf/dispatch (conj on-success {:scramble true}))))
-      (rf/dispatch [::e/initialize-db])
+      (complete-values)
       (rf/dispatch [::e/query-scrambliness])
       (let [result (rf/subscribe [::s/scrambles])]
         (is (= true @result)))))
@@ -80,7 +85,7 @@
 
   (testing "querying scrambling service clears errors"
     (rf-test/run-test-sync
-      (rf/dispatch [::e/initialize-db])
+      (complete-values)
       (rf/dispatch [::e/change-string "value "])
       (rf/reg-fx :http-xhrio (fn [{on-success :on-success}]
                                (rf/dispatch (conj on-success {:scramble true}))))
@@ -90,12 +95,19 @@
 
   (testing "typing clears result"
     (rf-test/run-test-sync
-      (rf/dispatch [::e/initialize-db])
       (rf/reg-fx :http-xhrio (fn [{on-success :on-success}]
                                (rf/dispatch (conj on-success {:scramble true}))))
+      (complete-values)
       (rf/dispatch [::e/query-scrambliness])
       (let [scrambles (rf/subscribe [::s/scrambles])]
         (is (= true @scrambles)))
       (rf/dispatch [::e/change-string "value"])
       (let [scrambles (rf/subscribe [::s/scrambles])]
-        (is (= nil @scrambles))))))
+        (is (= nil @scrambles)))))
+
+  (testing "the user needs to enter text"
+    (rf-test/run-test-sync
+      (rf/dispatch [::e/initialize-db])
+      (rf/dispatch [::e/query-scrambliness])
+      (let [error (rf/subscribe [::s/error])]
+        (is (= "You need to complete the values." @error))))))

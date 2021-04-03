@@ -34,12 +34,14 @@
   ::query-scrambliness
   (fn [{db :db} _]
     (let [{:keys [string target]} db]
-      {:db         (assoc db :error nil)
-       :http-xhrio {:method          :get
-                    :uri             (str "http://localhost:3000/scramble/" string "/" target)
-                    :response-format (ajax/json-response-format {:keywords? true})
-                    :on-success      [::show-scramble-result]
-                    :on-failure      [::show-error]}})))
+      (if (some empty? [string target])
+        {:db (assoc db :error "You need to complete the values.")}
+        {:db         (assoc db :error nil)
+         :http-xhrio {:method          :get
+                      :uri             (str "http://localhost:3000/scramble/" string "/" target)
+                      :response-format (ajax/json-response-format {:keywords? true})
+                      :on-success      [::show-scramble-result]
+                      :on-failure      [::show-error]}}))))
 
 (re-frame/reg-event-db
   ::show-error
