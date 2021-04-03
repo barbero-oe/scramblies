@@ -58,6 +58,15 @@
         (is (= "target" @target))
         (is (= "Only lower-case english letters are allowed." @error)))))
 
+  (testing "allows empty inputs"
+    (rf-test/run-test-sync
+      (rf/dispatch [::e/initialize-db])
+      (rf/dispatch [::e/change-target ""])
+      (let [target (rf/subscribe [::s/target])
+            error (rf/subscribe [::s/error])]
+        (is (= "" @target))
+        (is (= nil @error)))))
+
   (testing "clears error on typing"
     (rf-test/run-test-sync
       (rf/dispatch [::e/initialize-db])

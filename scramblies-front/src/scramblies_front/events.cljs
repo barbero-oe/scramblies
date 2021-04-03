@@ -8,7 +8,7 @@
 (defn initialize-db [_ _] db/default-db)
 (re-frame/reg-event-db ::initialize-db initialize-db)
 
-(defn alpha? [value] (re-matches #"[a-z]+" value))
+(defn alpha? [value] (re-matches #"[a-z]*" value))
 
 (defn validate [predicate error key value]
   (if (predicate value)
