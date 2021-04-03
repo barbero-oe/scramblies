@@ -25,10 +25,7 @@
       (ataraxy/handler)))
 
 (defn request [handlers type url]
-  (let [request (mock/request type url)
-        result (handlers request)]
-    (doall (map clojure.pprint/pprint [type url request result]))
-    result))
+  (handlers (mock/request type url)))
 
 (deftest scramble-handler-test
   (testing "handles scramble request"
@@ -36,3 +33,12 @@
           get-body #(:body (request config :get %))]
       (is (= {:scramble true} (get-body "/scramble/dlrow/world")))
       (is (= {:scramble false} (get-body "/scramble/foo/boo"))))))
+
+(deftest scramble-handler-test
+  (testing "checks the parameters are alphabetic"
+    (let [config (configure :scramblies-back.handler/scramble)
+          http-get #(request config :get %)
+          error {:status 400
+                 :body   {:error "Only lower-case english letters are allowed."}}]
+      (is (= error (http-get "/scramble/hello2/world")))
+      (is (= error (http-get "/scramble/foo/heLLo"))))))
