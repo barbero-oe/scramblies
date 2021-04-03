@@ -18,7 +18,7 @@
   ::query-scrambliness
   (fn [{{:keys [string target]} :db} _]
     {:http-xhrio {:method          :get
-                  :uri             (str "/scramble/" string "/" target)
+                  :uri             (str "http://localhost:3000/scramble/" string "/" target)
                   :response-format (ajax/json-response-format {:keyboards? true})
                   :on-success      [::show-scramble-result]
                   :on-failure      [::show-error]}}))

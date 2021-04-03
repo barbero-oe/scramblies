@@ -40,5 +40,6 @@
      {:string           @string
       :target           @target
       :scrambles        @scrambles
+      :on-scramble      #(re-frame/dispatch [::events/query-scrambliness])
       :on-string-change #(re-frame/dispatch [::events/change-string %])
       :on-target-change #(re-frame/dispatch [::events/change-target %])}]))

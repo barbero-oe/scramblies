@@ -6,6 +6,7 @@
                  [duct/core "0.8.0"]
                  [duct/module.ataraxy "0.3.0"]
                  [duct/module.logging "0.5.0"]
+                 [ring-cors "0.1.13"]
                  [duct/module.web "0.7.2"]]
   :plugins [[duct/lein-duct "0.12.2"]]
   :main ^:skip-aot scramblies-back.main

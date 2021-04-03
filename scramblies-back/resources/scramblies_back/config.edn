@@ -3,8 +3,12 @@
 
   :duct.router/ataraxy
   {:routes
-   {[:get "/scramble/" string "/" target] [:scramblies-back.handler/scramble string target]}}
+   {[:get "/scramble/" string "/" target]
+    ^:cors
+    [:scramblies-back.handler/scramble string target]}
+   :middleware {:cors #ig/ref :scramblies-back.middleware/cors}}
 
+  :scramblies-back.middleware/cors {:front-url #ig/ref :scramblies-back/front-url}
   :scramblies-back.handler/scramble {}}
 
  :duct.profile/dev   #duct/include "dev"
@@ -12,5 +16,4 @@
  :duct.profile/prod  {}
 
  :duct.module/logging {}
- :duct.module.web/api
- {}}
+ :duct.module.web/api {}}

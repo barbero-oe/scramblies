@@ -1,1 +1,2 @@
-{}
+{[:duct/const :scramblies-back/front-url]
+ "http://localhost:8280"}
