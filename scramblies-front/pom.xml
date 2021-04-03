@@ -46,6 +46,16 @@
             <version>1.2.0</version>
         </dependency>
         <dependency>
+            <groupId>day8.re-frame</groupId>
+            <artifactId>http-fx</artifactId>
+            <version>0.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>day8.re-frame</groupId>
+            <artifactId>test</artifactId>
+            <version>0.1.5</version>
+        </dependency>
+        <dependency>
             <groupId>stylefy</groupId>
             <artifactId>stylefy</artifactId>
             <version>2.2.2</version>
