@@ -40,7 +40,7 @@
         target (re-frame/subscribe [::subs/target])
         scrambles (re-frame/subscribe [::subs/scrambles])
         error (re-frame/subscribe [::subs/error])
-        color (re-frame/subscribe [::subs/color])]
+        color (re-frame/subscribe [::subs/background-color])]
     [:main (use-style (main-style @color))
      [:div (use-style center)
       [scramble-form

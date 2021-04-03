@@ -8,7 +8,7 @@
 (re-frame/reg-sub ::error #(:error %))
 
 (re-frame/reg-sub
-  ::color
+  ::background-color
   :<- [::scrambles]
   :<- [::error]
   (fn [[scrambles error] _]
