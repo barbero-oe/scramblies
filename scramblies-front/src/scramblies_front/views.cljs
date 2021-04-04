@@ -19,7 +19,7 @@
 
 (defn scramble-form [{:keys [string
                              target
-                             scrambles
+                             scramble-result
                              on-scramble
                              on-string-change
                              on-target-change]}]
@@ -30,15 +30,13 @@
                 :value     target}]
    [:button (use-style button-style {:on-click on-scramble}) "Scramble"]
    [:div (use-style message-info)
-    (case scrambles
-      true [:span "Scrambles!"]
-      false [:span "Does not scrambles"]
-      nil)]])
+    (when scramble-result
+      [:span scramble-result])]])
 
 (defn main-panel []
   (let [string (re-frame/subscribe [::subs/string])
         target (re-frame/subscribe [::subs/target])
-        scrambles (re-frame/subscribe [::subs/scrambles])
+        scramble-result (re-frame/subscribe [::subs/scramble-result])
         error (re-frame/subscribe [::subs/error])
         color (re-frame/subscribe [::subs/background-color])]
     [:main (use-style (main-style @color))
@@ -46,7 +44,7 @@
       [scramble-form
        {:string           @string
         :target           @target
-        :scrambles        @scrambles
+        :scramble-result  @scramble-result
         :on-scramble      #(re-frame/dispatch [::events/query-scrambliness])
         :on-string-change #(re-frame/dispatch [::events/change-string %])
         :on-target-change #(re-frame/dispatch [::events/change-target %])}]

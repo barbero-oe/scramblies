@@ -15,3 +15,12 @@
     (cond (every? nil? [error scrambles]) "transparent"
           scrambles "lightgreen"
           :else "salmon")))
+
+(re-frame/reg-sub
+  ::scramble-result
+  :<- [::scrambles]
+  (fn [scrambles _]
+    (case scrambles
+      true "Scrambles!"
+      false "Does not scrambles"
+      nil)))

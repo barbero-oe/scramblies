@@ -1,7 +1,7 @@
 (ns scramblies-front.views-test
   (:require [cljs.test :refer-macros [deftest testing is]]
             [scramblies-front.views :as views]
-            [com.rpl.specter :as s :refer [walker NONE ALL] :refer-macros [select select-any]]))
+            [com.rpl.specter :refer [walker NONE ALL] :refer-macros [select select-any]]))
 
 (defn has-text [view text]
   (select-any (walker (partial = text)) view))
@@ -20,7 +20,5 @@
       (is (= NONE (has-text not-specified "Does not scrambles")))))
 
   (testing "shows scramble result"
-    (let [scrambles (views/scramble-form {:scrambles true})
-          dont-scrambles (views/scramble-form {:scrambles false})]
-      (is (= "Does not scrambles" (has-text dont-scrambles "Does not scrambles")))
+    (let [scrambles (views/scramble-form {:scramble-result "Scrambles!"})]
       (is (= "Scrambles!" (has-text scrambles "Scrambles!"))))))

@@ -34,14 +34,23 @@
       (let [error (rf/subscribe [::s/error])]
         (is (= "Oops, try again..." @error)))))
 
-  (testing "shows result of scramble query"
+  (testing "shows successful result of scramble query"
     (rf-test/run-test-sync
       (rf/reg-fx :http-xhrio (fn [{on-success :on-success}]
                                (rf/dispatch (conj on-success {:scramble true}))))
       (complete-values)
       (rf/dispatch [::e/query-scrambliness])
-      (let [result (rf/subscribe [::s/scrambles])]
-        (is (= true @result)))))
+      (let [result (rf/subscribe [::s/scramble-result])]
+        (is (= "Scrambles!" @result)))))
+
+  (testing "shows failure result of scramble query"
+    (rf-test/run-test-sync
+      (rf/reg-fx :http-xhrio (fn [{on-success :on-success}]
+                               (rf/dispatch (conj on-success {:scramble false}))))
+      (complete-values)
+      (rf/dispatch [::e/query-scrambliness])
+      (let [result (rf/subscribe [::s/scramble-result])]
+        (is (= "Does not scrambles" @result)))))
 
   (testing "validates alphabetic string input"
     (rf-test/run-test-sync
@@ -102,12 +111,45 @@
       (let [scrambles (rf/subscribe [::s/scrambles])]
         (is (= true @scrambles)))
       (rf/dispatch [::e/change-string "value"])
-      (let [scrambles (rf/subscribe [::s/scrambles])]
-        (is (= nil @scrambles)))))
+      (let [scramble-result (rf/subscribe [::s/scramble-result])]
+        (is (= nil @scramble-result)))))
 
   (testing "the user needs to enter text"
     (rf-test/run-test-sync
       (rf/dispatch [::e/initialize-db])
       (rf/dispatch [::e/query-scrambliness])
       (let [error (rf/subscribe [::s/error])]
-        (is (= "You need to complete the values." @error))))))
+        (is (= "You need to complete the values." @error)))))
+
+  (testing "defines error background color"
+    (rf-test/run-test-sync
+      (rf/dispatch [::e/initialize-db])
+      (rf/dispatch [::e/query-scrambliness])
+      (let [color (rf/subscribe [::s/background-color])]
+        (is (= "salmon" @color)))))
+
+  (testing "defines normal background color"
+    (rf-test/run-test-sync
+      (rf/dispatch [::e/initialize-db])
+      (let [color (rf/subscribe [::s/background-color])]
+        (is (= "transparent" @color)))))
+
+  (testing "defines background color when the string scrambles"
+    (rf-test/run-test-sync
+      (rf/dispatch [::e/initialize-db])
+      (rf/reg-fx :http-xhrio (fn [{on-success :on-success}]
+                               (rf/dispatch (conj on-success {:scramble true}))))
+      (complete-values)
+      (rf/dispatch [::e/query-scrambliness])
+      (let [color (rf/subscribe [::s/background-color])]
+        (is (= "lightgreen" @color)))))
+
+  (testing "defines background color when the string does not scrambles"
+    (rf-test/run-test-sync
+      (rf/dispatch [::e/initialize-db])
+      (rf/reg-fx :http-xhrio (fn [{on-failure :on-failure}]
+                               (rf/dispatch on-failure)))
+      (complete-values)
+      (rf/dispatch [::e/query-scrambliness])
+      (let [color (rf/subscribe [::s/background-color])]
+        (is (= "salmon" @color))))))
